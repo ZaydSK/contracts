@@ -38,15 +38,14 @@ class StoreContractRequest extends FormRequest
             'down_percent' => 'required|numeric',
             'up_price' => 'required|numeric',
             'starting_date' => 'required|date|after:date',
-            'finishing_date' => 'required|date|after:starting_order_date',
+            'finishing_date' => 'required|date|after:starting_date',
             'execution_period' => 'required|string',
             'materials' => 'required|array|min:1',
-            'materials.*.'=>'',
-            'material_name' => 'required|string',
-            'unit' => 'required|string',
-            'number' => 'required|string|regex:/^[0-9]+$/',
-            'quantity' => 'required|numeric',
-            'individual_price' => 'required|numeric',
+            'materials.*.material_name' => 'required|string',
+            'materials.*.unit' => 'required|string',
+            'materials.*.quantity' => 'required|numeric',
+            'materials.*.individual_price' => 'required|numeric',
+            'materials.*.overall_price' => 'required|numeric',
         ];
         
     }

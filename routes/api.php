@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\MaterialController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/contracts', [ContractController::class,'all']);
-Route::get('/contracts/{contract}', [ContractController::class,'all']);
-Route::post('/contracts', [ContractController::class,'add']);
-Route::get('/contracts/{contract}/materials', [MaterialController::class,'all']);
-Route::post('/contracts/{contract}/materials', [MaterialController::class,'add']);
+Route::prefix('contracts')->group( function(){
+    Route::get('/', [ContractController::class,'all']);
+    Route::get('/{contract}', [ContractController::class,'one']);
+    Route::post('/', [ContractController::class,'add']);
+    Route::get('/{contract}/materials', [ContractController::class,'materials']);
+});
+

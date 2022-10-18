@@ -15,8 +15,6 @@ class ContractMaterial extends Model
         'overall_price',
         'quantity',
         'unit',
-        'date',
-        
     ];
 
     public function contract(){

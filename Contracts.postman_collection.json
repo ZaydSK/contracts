@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "e1b7fe1b-383d-4088-bd4f-5d7f744df8f3",
+		"name": "Contracts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22933962"
+	},
+	"item": [
+		{
+			"name": "add contract",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"fdf\",\r\n    \"executing_agency\":\"dddd\",\r\n    \"watching_agency\":\"dddd\",\r\n    \"date\":\"2020-10-20\",\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"finishing_date\":\"2020-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"s5sf\",\r\n    \"branch\":\"ssssss\",\r\n    \"content\":\"sssssss\",\r\n    \"price\":50,\r\n    \"up_price\":10,\r\n    \"materials\":[\r\n        {\r\n            \"material_name\":\"Steel\",\r\n            \"unit\":\"f\",\r\n            \"quantity\":20,\r\n            \"individual_price\":55,\r\n            \"overall_price\":44\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "materials for a contract",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "date",
+							"value": "2022-10-20",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "individual_price",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "material_name",
+							"value": "Steel",
+							"type": "text"
+						},
+						{
+							"key": "number",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/1/materials",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"materials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all contracts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "date",
+							"value": "2022-10-20",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "individual_price",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "material_name",
+							"value": "Steel",
+							"type": "text"
+						},
+						{
+							"key": "number",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one contract",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "date",
+							"value": "2022-10-20",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "individual_price",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "material_name",
+							"value": "Steel",
+							"type": "text"
+						},
+						{
+							"key": "number",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
