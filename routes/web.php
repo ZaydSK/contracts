@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContractController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::prefix('contracts')->group( function(){
+    Route::get('/', [ContractController::class,'all']);
+    Route::get('/{contract}', [ContractController::class,'one']);
+    Route::post('/', [ContractController::class,'add']);
+    Route::get('/{contract}/materials', [ContractController::class,'materials']);
 });

@@ -20,10 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('contracts')->group( function(){
-    Route::get('/', [ContractController::class,'all']);
-    Route::get('/{contract}', [ContractController::class,'one']);
-    Route::post('/', [ContractController::class,'add']);
-    Route::get('/{contract}/materials', [ContractController::class,'materials']);
-});
+
 
