@@ -46,6 +46,7 @@ class StoreContractRequest extends FormRequest
             'materials.*.quantity' => 'required|numeric',
             'materials.*.individual_price' => 'required|numeric',
             'materials.*.overall_price' => 'required|numeric',
+            'materials.*.number' => 'required|numeric',
         ];
         
     }

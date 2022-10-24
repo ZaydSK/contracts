@@ -16,6 +16,7 @@ class ContractMaterialResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'number' => $this->number,
             'material_name' => $this->material_name,
             'contract_id' => $this->contract_id,
             'individual_price' => $this->individual_price,
