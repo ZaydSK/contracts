@@ -23,9 +23,7 @@ class ContractController extends Controller
         return ContractMaterialResource::collection($contract->materials);
     }
 
-    public function add(StoreContractRequest $request){
-        $request->validated();
-        $materials = $request->materials;
+    public function add(StoreContractRequest $request){        $materials = $request->materials;
         $overall_price = 0;
        
         foreach($materials as $material){
