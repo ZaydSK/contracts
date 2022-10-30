@@ -22,7 +22,7 @@ return new class extends Migration
             $table->bigInteger('quantity');
             $table->bigInteger('individual_price');
             $table->bigInteger('overall_price');
-            $table->integer('number');
+            $table->text('number');
             $table->timestamps();
         });
     }
