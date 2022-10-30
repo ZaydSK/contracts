@@ -55,7 +55,7 @@ class StoreContractRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'msg' => 'An error was occurred',
-            'errors' => $validator->errors()->all(),
-        ], 422));
+            'error' => $validator->errors()->all(),
+        ], 400));
     }
 }
