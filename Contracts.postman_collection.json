@@ -13,7 +13,36 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\":\"fdf\",\r\n    \"executing_agency\":\"dddd\",\r\n    \"watching_agency\":\"dddd\",\r\n    \"date\":\"2020-10-20\",\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"finishing_date\":\"2020-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"s5sf\",\r\n    \"branch\":\"ssssss\",\r\n    \"content\":\"sssssss\",\r\n    \"price\":50,\r\n    \"up_price\":10,\r\n    \"materials\":[\r\n        {\r\n            \"material_name\":\"Steel\",\r\n            \"unit\":\"f\",\r\n            \"quantity\":20,\r\n            \"individual_price\":55,\r\n            \"overall_price\":44\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"name\":\"fdf\",\r\n    \"executing_agency\":\"dddd\",\r\n    \"watching_agency\":\"dddd\",\r\n    \"date\":\"2020-10-20\",\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"finishing_date\":\"2020-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"s5sf\",\r\n    \"branch\":\"ssssss\",\r\n    \"content\":\"sssssss\",\r\n    \"price\":50,\r\n    \"up_price\":10,\r\n    \"materials\":[\r\n        {\r\n            \r\n            \"unit\":\"f\",\r\n            \"quantity\":20,\r\n            \"individual_price\":55,\r\n            \"overall_price\":44\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search contracts",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"executing_agency\":\"dddd\",\r\n    \"number\": \"5sf\",\r\n    \"branch\":\"ssssss\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
