@@ -36,13 +36,112 @@
 			"response": []
 		},
 		{
+			"name": "add bill",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\":\"2022-01-01\",\r\n    \"materials\": [\r\n        {\r\n            \"material_id\":1,\r\n            \"quantity\":10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/1/bills/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"bills",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one bill",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\":\"2022-01-01\",\r\n    \"materials\": [\r\n        {\r\n            \"material_id\":1,\r\n            \"quantity\":10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/1/bills/6",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"bills",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all bills",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\":\"2022-01-01\",\r\n    \"materials\": [\r\n        {\r\n            \"material_id\":1,\r\n            \"quantity\":10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/1/bills/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"bills",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "search contracts",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \r\n    \"executing_agency\":\"dddd\",\r\n    \"number\": \"gg\",\r\n    \"branch\":\"ssssss\"\r\n}",
+					"raw": "{\r\n    \r\n    \"executing_agency\":\"dddd\",\r\n    \"number\": \"gg\",\r\n    \"branch\":\"ssdssss\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
