@@ -19,6 +19,10 @@ class CreateBillsTable extends Migration
             $table->foreign('contract_id')->references('id')->on('contracts');
             $table->date('date');
             $table->bigInteger('overall_price');
+            $table->bigInteger('new_price');
+            $table->bigInteger('discount');
+            $table->bigInteger('discount_of_executing_agency_price');
+            $table->bigInteger('executing_agency_price');
             $table->timestamps();
         });
     }

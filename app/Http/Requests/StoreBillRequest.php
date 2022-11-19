@@ -27,6 +27,7 @@ class StoreBillRequest extends FormRequest
     {
         return [
             'date' => 'required|date',
+            'discount' => 'required|numeric',
             'materials' => 'required|array|min:1',
             'materials.*.material_id' => 'required|numeric',
             'materials.*.quantity' => 'required|numeric',

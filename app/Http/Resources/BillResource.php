@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Contract;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BillResource extends JsonResource
@@ -17,8 +18,14 @@ class BillResource extends JsonResource
         return [
             'id'=> $this->id,
             'contract_id' => $this->contract_id,
-            'date' => $this->date,
+            'date' => substr($this->date,0,7),
             'overall_price' => $this->overall_price,
+            'new_price' => $this->new_price,
+            'discount' => $this->discount,
+            'executing_agency_price' => $this->executing_agency_price,
+            'discount_of_executing_agency_price' => $this->discount_of_executing_agency_price,
+            'executing_agency_price_after_discount' => $this->executing_agency_price - $this->discount_of_executing_agency_price,
+            'subs' => $this->subs,
             'materials' => BillMaterialResource::collection($this->materials)
         ];
     }

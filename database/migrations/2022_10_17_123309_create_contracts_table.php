@@ -25,10 +25,13 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->bigInteger('up_price');
             $table->integer('up_percent');
+            $table->integer('stoppings_percent');
             $table->integer('down_percent');
             $table->date('starting_date');
             $table->date('finishing_date');
+            $table->date('virtual_finishing_date');
             $table->text('execution_period');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
         });
     }
