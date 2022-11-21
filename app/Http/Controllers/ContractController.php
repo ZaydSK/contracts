@@ -164,10 +164,13 @@ class ContractController extends Controller
     }
 
     public function oneBill(Contract $contract,Bill $bill){
+        if($bill->contract_id!=$contract->id){
+            return response("لا يوجد كشف يحمل المعرف المطلوب ضمن مشوفات العقد الحالي",400);
+        }
         return new BillResource($bill);
     }
 
-    public function allBills(){
-        return BillResource::collection(Bill::all());
+    public function allBills(Contract $contract){
+        return BillResource::collection(Bill::where('contract_id',$contract->id)->get());
     }
 }
