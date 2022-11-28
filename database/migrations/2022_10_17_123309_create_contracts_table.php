@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->text('name');
+            $table->text('project_name');
             $table->text('branch');
-            $table->text('content');
+            $table->text('area_name');
             $table->text('number');
             $table->text('executing_agency');
             $table->text('watching_agency');
@@ -28,10 +28,9 @@ return new class extends Migration
             $table->integer('stoppings_percent');
             $table->integer('down_percent');
             $table->date('starting_date');
-            $table->date('finishing_date');
+            $table->date('finishing_date')->nullable();
             $table->date('virtual_finishing_date');
             $table->text('execution_period');
-            $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
         });
     }

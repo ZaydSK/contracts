@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ContractController;
-use App\Http\Controllers\MaterialController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

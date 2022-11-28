@@ -18,11 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('contract_id');
             $table->foreign('contract_id')->references('id')->on('contracts');
             $table->text('material_name');
+            $table->boolean('contract_material')->default(1);
             $table->text('unit');
-            $table->bigInteger('quantity');
-            $table->bigInteger('individual_price');
-            $table->bigInteger('overall_price');
             $table->text('number');
+            $table->double('price');
             $table->timestamps();
         });
     }

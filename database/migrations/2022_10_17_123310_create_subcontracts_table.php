@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBillsTable extends Migration
+class CreateSubcontractsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateBillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bills', function (Blueprint $table) {
+        Schema::create('subcontracts', function (Blueprint $table) {
             $table->id();
+            $table->text('number');
+            $table->text('agreement_number');
+            $table->text('subject');
+            $table->double('price');
+            $table->date('starting_date');
+            $table->date('agreement_date');
             $table->unsignedBigInteger('contract_id');
             $table->foreign('contract_id')->references('id')->on('contracts');
-            $table->date('date');
-            $table->bigInteger('price');
-            $table->bigInteger('up_price');
-            $table->bigInteger('discount');
-            $table->bigInteger('discount_of_executing_agency_price');
-            $table->bigInteger('executing_agency_price');
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ class CreateBillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bills');
+        Schema::dropIfExists('subcontracts');
     }
 }

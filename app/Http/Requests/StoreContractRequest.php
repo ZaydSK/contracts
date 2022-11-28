@@ -26,25 +26,25 @@ class StoreContractRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' =>'required|string|min:3',
+            'area_name' =>'required|string|min:3',
+            'project_name' =>'required|string|min:3',
             'executing_agency' =>'required|string|min:3',
             'watching_agency' =>'required|string|min:3',
             'date' =>'required|date',
             'number' =>'required|string',
             'branch' =>'required|string',
-            'content' =>'required|string',
             'up_percent' => 'required|numeric',
             'down_percent' => 'required|numeric',
             'stoppings_percent' => 'required|numeric',
             'starting_date' => 'required|date|after:date',
-            'finishing_date' => 'required|date|after:starting_date',
+            //'finishing_date' => 'required|date|after:starting_date',
             'execution_period' => 'required|string',
             'materials' => 'required|array|min:1',
             'materials.*.material_name' => 'required|string',
             'materials.*.unit' => 'required|string',
-            'materials.*.quantity' => 'required|numeric',
-            'materials.*.individual_price' => 'required|numeric',
-            'materials.*.overall_price' => 'required|numeric',
+            //'materials.*.quantity' => 'required|numeric',
+            //'materials.*.individual_price' => 'required|numeric',
+            //'materials.*.overall_price' => 'required|numeric',
             'materials.*.number' => 'required|string',
         ];
         
@@ -54,7 +54,7 @@ class StoreContractRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'msg' => 'An error was occurred',
-            'error' => $validator->errors()->all()[0],
+            'error' => $validator->errors()->all(),
         ], 400));
     }
 }

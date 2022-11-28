@@ -9,23 +9,22 @@ class Contract extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'date',
-        'branch',
-        'content',
-        'up_percent',
-        'down_percent',
-        'stoppings_percent',
-        'number',
-        'price',
-        'up_price',
-        'starting_date',
-        'finishing_date',
-        'virtual_finishing_date',
-        'execution_period',
-        'executing_agency',
-        'watching_agency',
-        'parent_id'
+        'project_name', // اسم المشروع
+        'date', // التاريخ
+        'branch', // الفرع
+        'area_name', // المضمون
+        'up_percent', // نسبة الضم
+        'down_percent', // نسبة التنزيل 
+        'stoppings_percent', // نسبة التوقيفات
+        'number', // رقم العقد
+        'price', // السعر
+        'up_price', // بدل الاحالة
+        'starting_date', // تاريخ البداية
+        //'finishing_date', // تاريخ الانتهاء
+        'virtual_finishing_date',  // تاريخ الانتهاء المتوقع
+        'execution_period', // مدة التنفيذ
+        'executing_agency', // الجهة المنفذة
+        'watching_agency', // الجهة المشرفة
     ];
 
     public function materials(){
@@ -33,6 +32,14 @@ class Contract extends Model
     }
 
     public function subs(){
-        return $this->hasMany(Contract::class,'parent_id');
+        return $this->hasMany(Subcontract::class);
+    }
+
+    public function bills(){
+        return $this->hasMany(Bill::class);
+    }
+
+    public function materialAmounts(){
+        return $this->morphMany(MaterialAmount::class,'parentable');
     }
 }

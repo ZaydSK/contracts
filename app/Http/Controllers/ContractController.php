@@ -6,12 +6,15 @@ use App\Http\Requests\StoreBillRequest;
 use App\Models\Contract;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreContractRequest;
+use App\Http\Requests\StoreSubcontractRequest;
 use App\Http\Resources\BillResource;
 use App\Http\Resources\ContractMaterialResource;
 use App\Http\Resources\ContractResource;
 use App\Models\Bill;
 use App\Models\BillMaterial;
 use App\Models\ContractMaterial;
+use App\Models\MaterialAmount;
+use App\Models\Subcontract;
 use Carbon\Carbon;
 
 class ContractController extends Controller
@@ -19,7 +22,7 @@ class ContractController extends Controller
     //TODO? ADD sub contract / each contract shouldn't have more than 10 subs
     //TODO? new price of all subs shouldn't exceed 25% of original new price
     public function all(){
-        return ContractResource::collection(Contract::where('parent_id',null)->get());
+        return ContractResource::collection(Contract::where('contract_id',null)->get());
     }
 
     public function one(Contract $contract){
@@ -62,42 +65,79 @@ class ContractController extends Controller
         return new ContractResource($contract);
     }
 
-    public function addSub(StoreContractRequest $request,Contract $contract){ 
-        $parent_id = $request->contract->id;       
-        $materials = $request->materials;
+    public function addSub(StoreSubcontractRequest $request,Contract $contract){ 
+        $contract_id = $request->contract->id;       
+        $contract_materials = $request->contract_materials;
+        $other_materials = $request->other_materials;
         $overall_price = 0;
 
         if($contract->subs->count()>9){
             return response(['error'=>"لا يمكن إضافة أكثر من 10 عقود ملحقة"],400);
         }
         
-        foreach($materials as $material){
-            $overall_price += $material['overall_price'] ;
+         $res = $contract->materials()->createMany(array_map(function($material){
+            return [
+                'material_name' => $material['material_name'],
+                'unit' => $material['unit'],
+                'price' => $material['individual_price'],
+                'number' => $material['number'],
+                'contract_material' => 0
+            ];
+        },$other_materials));
+        //return response($contract_materials_rows);
+        $other_materials_amounts = [];
+        $i=0;
+        foreach($res as $material){
+            $overall_price += $material->price;
+
+            array_push($other_materials_amounts,[
+                'material_id' => $material->id,
+                'quantity' => $other_materials[$i]['quantity'],
+                'not_used_quantity' =>$other_materials[$i]['quantity'],
+                'individual_price' => $material->price,
+                'overall_price' => $material->quantity* $material->price
+            ]);
+            $i++;
         }
 
-        if($request['up_percent']!=0){
-            $up_price = $overall_price + $overall_price*$request['up_percent']/100; 
-        }
-        else if($request['down_percent']!=0){
-            $up_price = $overall_price*(100-$request['down_percent']/100); 
-        }
-        else{
-            $up_price=$overall_price;
-        }
+        $contract_materials_amounts = [];
+        foreach($contract_materials as $material){
+            $material_price = ContractMaterial::where('id',$material['id'])->first();
+            $material_amount = MaterialAmount::where('material_id',$material_price->id)->first();
+            //return $material_amount;
+            $overall_price += $material['quantity']* $material_price->price;
 
-        $subs_prices = Contract::where('parent_id',$parent_id)->sum('up_price');
-        if($contract->up_price/4 < $subs_prices + $up_price){
-            return response(['error'=>"لا يمكن أن تكون قيمة العقود الفرعية أكبر من ربع العقد الأساسي"],400);
-        }
+            array_push($contract_materials_amounts,[
+                'material_id' => $material['id'],
+                'quantity' => $material['quantity'],
+                'not_used_quantity' => $material['quantity'],
+                'individual_price' => $material_amount->individual_price,
+                'overall_price' => $material['quantity']* $material_price->price
+            ]);
 
-        $virtual_finishing_date = Carbon::parse($request->starting_date)
-                                    ->addDays($request->execution_period);
-        $request['parent_id'] = $parent_id;
-        $request['up_price'] = $up_price;
+        }
+      //return $contract_materials_amounts;
+        // if($request['up_percent']!=0){
+        //     $up_price = $overall_price + $overall_price*$request['up_percent']/100; 
+        // }
+        // else if($request['down_percent']!=0){
+        //     $up_price = $overall_price*(100-$request['down_percent']/100); 
+        // }
+        // else{
+        //     $up_price=$overall_price;
+        // }
+
+        // $subs_prices = Subcontract::where('contract_id',$contract_id)->sum('up_price');
+        // if($contract->up_price/4 < $subs_prices + $up_price){
+        //     return response(['error'=>"لا يمكن أن تكون قيمة العقود الفرعية أكبر من ربع العقد الأساسي"],400);
+        // }
+
+        $request['contract_id'] = $contract_id;
+        //$request['up_price'] = $up_price;
         $request['price'] = $overall_price;
-        $request['virtual_finishing_date'] = $virtual_finishing_date;
-        $contract = Contract::create($request->except('materials'));
-        $contract->materials()->createMany($materials);
+        $subcontract = Subcontract::create($request->except('contract_materials','other_materials'));
+        $subcontract->materialAmounts()->createMany($other_materials_amounts);
+        $subcontract->materialAmounts()->createMany($contract_materials_amounts);
         return new ContractResource($contract);
     }
 
@@ -134,25 +174,25 @@ class ContractController extends Controller
             $material['price'] = $material_price;
             array_push($materials, $material);
         }
-        $new_price=0;
+        $up_price=0;
         if($contract['up_percent']!=0){
-            $new_price = $bill_price + $bill_price*$contract['up_percent']/100; 
+            $up_price = $bill_price + $bill_price*$contract['up_percent']/100; 
         }
         else if($contract['down_percent']!=0){
-            $new_price = $bill_price*(100-$contract['down_percent']/100); 
+            $up_price = $bill_price*(100-$contract['down_percent']/100); 
         }
         else{
-            $new_price=$bill_price;
+            $up_price=$bill_price;
         }
     
-        $executing_agency_price =  $new_price - $request->discount + $contract->subs->sum('up_price');
+        $executing_agency_price =  $up_price - $request->discount + $contract->subs->sum('up_price');
         
         $bill = Bill::create([
             'contract_id' => $contract->id,
             'date' => $request->date,
             'discount' => $request->discount,
-            'overall_price' => $bill_price,
-            'new_price' => $new_price,
+            'price' => $bill_price,
+            'up_price' => $up_price,
             'executing_agency_price' => $executing_agency_price,
             'discount_of_executing_agency_price' => $executing_agency_price * $contract->stoppings_percent /100
         ]);

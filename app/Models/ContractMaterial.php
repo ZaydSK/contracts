@@ -11,9 +11,8 @@ class ContractMaterial extends Model
     protected $fillable = [
         'material_name',
         'contract_id',
-        'individual_price',
-        'overall_price',
-        'quantity',
+        'price',
+        'contract_material',
         'unit',
         'number'
     ];
