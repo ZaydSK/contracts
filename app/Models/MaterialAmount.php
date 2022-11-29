@@ -17,7 +17,7 @@ class MaterialAmount extends Model
         'material_id'
     ];
 
-    public function parent(){
+    public function parentable(){
         return $this->morphTo();
     }
 }

@@ -14,4 +14,8 @@ class BillMaterial extends Model
     public function bill(){
         return $this->belongsTo(Bill::class);
     }
+
+    public function details(){
+        return $this->hasMany(BillMaterialDetails::class);
+    }
 }

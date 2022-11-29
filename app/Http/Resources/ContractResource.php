@@ -32,7 +32,8 @@ class ContractResource extends JsonResource
             'execution_period'  => $this->execution_period,
             'executing_agency'  => $this->executing_agency,
             'watching_agency'  => $this->watching_agency,
-            'materials' =>  ContractMaterialResource::collection($this->materials),
+            //'materials' =>  ContractMaterialResource::collection($this->materialAmounts),
+            'materials' => $this->summed()
         ];
     }
 }

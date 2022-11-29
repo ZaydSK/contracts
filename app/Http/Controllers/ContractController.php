@@ -12,6 +12,7 @@ use App\Http\Resources\ContractMaterialResource;
 use App\Http\Resources\ContractResource;
 use App\Models\Bill;
 use App\Models\BillMaterial;
+use App\Models\BillMaterialDetails;
 use App\Models\ContractMaterial;
 use App\Models\MaterialAmount;
 use App\Models\Subcontract;
@@ -22,10 +23,11 @@ class ContractController extends Controller
     //TODO? ADD sub contract / each contract shouldn't have more than 10 subs
     //TODO? new price of all subs shouldn't exceed 25% of original new price
     public function all(){
-        return ContractResource::collection(Contract::where('contract_id',null)->get());
+        return ContractResource::collection(Contract::all());
     }
 
     public function one(Contract $contract){
+       
         return new ContractResource($contract);
     }
 
@@ -52,16 +54,33 @@ class ContractController extends Controller
         }
         $virtual_finishing_date = Carbon::parse($request->starting_date)
                                     ->addDays($request->execution_period);
-                                   
-                                    //->toDateString();
         $request['up_price'] = $up_price;
         $request['price'] = $overall_price;
         $request['virtual_finishing_date'] = $virtual_finishing_date;
-       // return $virtual_finishing_date->format('m-Y');
+       
         //? Add up_price to request
         //? add virtual finishing date: starting date + executing period 
         $contract = Contract::create($request->except('materials'));
-        $contract->materials()->createMany($materials);
+        $materials = array_map(function($material) use($contract){
+                $res = $contract->materials()->create([
+                    'material_name' => $material['material_name'],
+                    'price' => $material['individual_price'],
+                    'number' => $material['number'],
+                    'unit' => $material['unit'],
+                ]);
+                $material['id'] = $res->id; 
+                return $material;
+            },$materials);
+       
+        $contract->materialAmounts()->createMany(array_map(function($material){
+            return [
+                'material_id' => $material['id'],
+                'individual_price' => $material['individual_price'],
+                'overall_price' => $material['overall_price'],
+                'quantity' => $material['quantity'],
+                'not_used_quantity' => $material['quantity'],
+            ];
+        },$materials));
         return new ContractResource($contract);
     }
 
@@ -75,48 +94,40 @@ class ContractController extends Controller
             return response(['error'=>"لا يمكن إضافة أكثر من 10 عقود ملحقة"],400);
         }
         
-         $res = $contract->materials()->createMany(array_map(function($material){
-            return [
+        $other_materials = array_map(function($material) use($contract,$overall_price){
+            $res = $contract->materials()->create([
                 'material_name' => $material['material_name'],
-                'unit' => $material['unit'],
                 'price' => $material['individual_price'],
                 'number' => $material['number'],
+                'unit' => $material['unit'],
                 'contract_material' => 0
-            ];
-        },$other_materials));
-        //return response($contract_materials_rows);
-        $other_materials_amounts = [];
-        $i=0;
-        foreach($res as $material){
-            $overall_price += $material->price;
-
-            array_push($other_materials_amounts,[
-                'material_id' => $material->id,
-                'quantity' => $other_materials[$i]['quantity'],
-                'not_used_quantity' =>$other_materials[$i]['quantity'],
-                'individual_price' => $material->price,
-                'overall_price' => $material->quantity* $material->price
             ]);
-            $i++;
+            $material['material_id'] = $res->id; 
+            $material['not_used_quantity'] = $material['quantity'];
+
+           
+            return $material;
+        },$other_materials);
+
+        foreach($other_materials as $material){
+            $overall_price += $material['overall_price'];
         }
+      
 
         $contract_materials_amounts = [];
         foreach($contract_materials as $material){
-            $material_price = ContractMaterial::where('id',$material['id'])->first();
-            $material_amount = MaterialAmount::where('material_id',$material_price->id)->first();
-            //return $material_amount;
-            $overall_price += $material['quantity']* $material_price->price;
+            $material_amount = MaterialAmount::where('material_id',$material['id'])->first();
+            $overall_price += $material['quantity']* $material_amount->individual_price;
 
             array_push($contract_materials_amounts,[
                 'material_id' => $material['id'],
                 'quantity' => $material['quantity'],
                 'not_used_quantity' => $material['quantity'],
                 'individual_price' => $material_amount->individual_price,
-                'overall_price' => $material['quantity']* $material_price->price
+                'overall_price' => $material['quantity']* $material_amount->individual_price
             ]);
 
         }
-      //return $contract_materials_amounts;
         // if($request['up_percent']!=0){
         //     $up_price = $overall_price + $overall_price*$request['up_percent']/100; 
         // }
@@ -133,10 +144,11 @@ class ContractController extends Controller
         // }
 
         $request['contract_id'] = $contract_id;
+       
         //$request['up_price'] = $up_price;
         $request['price'] = $overall_price;
         $subcontract = Subcontract::create($request->except('contract_materials','other_materials'));
-        $subcontract->materialAmounts()->createMany($other_materials_amounts);
+        $subcontract->materialAmounts()->createMany($other_materials);
         $subcontract->materialAmounts()->createMany($contract_materials_amounts);
         return new ContractResource($contract);
     }
@@ -151,6 +163,7 @@ class ContractController extends Controller
     }
 
     public function addBill(Contract $contract,StoreBillRequest $request){
+        
         $canAddBill = true;
         //TODO? make date format without day
         //TODO? add discount to each bill
@@ -161,19 +174,18 @@ class ContractController extends Controller
         $bill_price = 0;
         $materials = [];
         foreach($request->materials as $material){
-            $old_bills = Bill::where('contract_id',$contract->id)->pluck('id');
-            $used_quantity = BillMaterial::whereIn('bill_id',$old_bills)->sum('quantity');
-            $all_quantity = ContractMaterial::where('id',$material['material_id'])->where('contract_id',$contract->id)->sum('quantity');
-            if($all_quantity - $used_quantity < $material['quantity']){
-                $left = $all_quantity - $used_quantity ;
-                return response(["error"=>"لا يوجد كمية كافية من المادة ". $material['material_id']. "،المتبقي هو ". $left]);
+            $not_used_quantity = MaterialAmount::where('material_id',$material['material_id'])->sum('not_used_quantity');
+            if($not_used_quantity < $material['quantity']){
+                return response(["error"=>"لا يوجد كمية كافية من المادة ". $material['material_id']. "،المتبقي هو ". $not_used_quantity]);
             }
             
-            $material_price = ContractMaterial::where('id',$material['material_id'])->where('contract_id',$contract->id)->first()->individual_price;
+            $material_price = ContractMaterial::where('id',$material['material_id'])->where('contract_id',$contract->id)->first()->price;
             $bill_price += $material['quantity'] * $material_price;
-            $material['price'] = $material_price;
+            $material['price'] = $bill_price;
             array_push($materials, $material);
         }
+       
+
         $up_price=0;
         if($contract['up_percent']!=0){
             $up_price = $bill_price + $bill_price*$contract['up_percent']/100; 
@@ -198,7 +210,53 @@ class ContractController extends Controller
         ]);
 
        
-        $bill->materials()->createMany($materials);
+        //$bill->materials()->createMany($materials);
+
+        foreach($materials as $material){
+            $bill_material = $bill->materials()->create($material);
+
+            $ids = Subcontract::where('contract_id',$contract->id)->pluck('id');
+            $materialAmounts = MaterialAmount::where('material_id',$material['material_id'])
+            ->where(function($query) use($contract,$ids){
+                $query->where([
+                    ['parentable_type',"App\\Models\\Contract"],
+                    ['parentable_id',$contract->id]
+            ])->orWhere(function($query) use ($ids){
+                $query->whereIn('parentable_id',$ids)
+                    ->where('parentable_type',"App\\Models\\Subcontract");
+            
+            });})->get();
+           
+            foreach($materialAmounts as $amount){
+             
+                if(($material['material_id'] == $amount->material_id) && ($amount->not_used_quantity >0) ){
+                  
+                    if($material['quantity'] <= $amount->not_used_quantity){
+                        $bill_material->details()->create([
+                            'material_amount_id' => $amount['id'],
+                            'price' => $amount['individual_price'] * $material['quantity'],
+                            'quantity' => $material['quantity']
+                        ]);
+                        $amount->not_used_quantity -= $material['quantity'];
+                        
+                        $amount->save();
+                        break;
+                    } else {
+                        $bill_material->details()->create([
+                            'material_amount_id' => $amount['id'],
+                            'price' => $amount['individual_price'] * $material['quantity'],
+                            'quantity' =>  $material['quantity']
+                        ]);
+                        $material['quantity'] -= $amount->not_used_quantity;
+                        $amount->not_used_quantity = 0;
+                        $amount->save();
+                    }
+                }
+            }
+            
+        }
+
+        
         $bill->subs = $contract->subs;
         return new BillResource($bill);
     }
