@@ -41,6 +41,7 @@ class Contract extends Model
 
     public function materialAmounts(){
         return $this->morphMany(MaterialAmount::class,'parentable');
+        return 'hello';
     }
 
   public function summed(){
