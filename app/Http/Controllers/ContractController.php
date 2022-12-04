@@ -98,26 +98,30 @@ class ContractController extends Controller
             return response(['error'=>"لا يمكن إضافة أكثر من 10 عقود ملحقة"],400);
         }
         
-        $other_materials = array_map(function($material) use($contract,$overall_price){
-            $res = $contract->materials()->create([
-                'material_name' => $material['material_name'],
-                'price' => $material['individual_price'],
-                'number' => $material['number'],
-                'unit' => $material['unit'],
-                'contract_material' => 0
-            ]);
-            $material['material_id'] = $res->id; 
-            $material['not_used_quantity'] = $material['quantity'];
+        if($other_materials){
+            $other_materials = array_map(function($material) use($contract,$overall_price){
+                $res = $contract->materials()->create([
+                    'material_name' => $material['material_name'],
+                    'price' => $material['individual_price'],
+                    'number' => $material['number'],
+                    'unit' => $material['unit'],
+                    'contract_material' => 0
+                ]);
+                $material['material_id'] = $res->id; 
+                $material['not_used_quantity'] = $material['quantity'];
+    
+               
+                return $material;
+            },$other_materials);
 
-           
-            return $material;
-        },$other_materials);
-
-        foreach($other_materials as $material){
-            $overall_price += $material['overall_price'];
+            foreach($other_materials as $material){
+                $overall_price += $material['overall_price'];
+            }
+    
         }
-      
-
+        
+       
+      if($contract_materials){
         $contract_materials_amounts = [];
         foreach($contract_materials as $material){
             $material_amount = MaterialAmount::where('material_id',$material['id'])->first();
@@ -132,6 +136,9 @@ class ContractController extends Controller
             ]);
 
         }
+      }
+
+        
         // if($request['up_percent']!=0){
         //     $up_price = $overall_price + $overall_price*$request['up_percent']/100; 
         // }
@@ -152,8 +159,8 @@ class ContractController extends Controller
         //$request['up_price'] = $up_price;
         $request['price'] = $overall_price;
         $subcontract = Subcontract::create($request->except('contract_materials','other_materials'));
-        $subcontract->materialAmounts()->createMany($other_materials);
-        $subcontract->materialAmounts()->createMany($contract_materials_amounts);
+        if($other_materials)$subcontract->materialAmounts()->createMany($other_materials);
+        if($contract_materials)$subcontract->materialAmounts()->createMany($contract_materials_amounts);
         return new ContractResource($contract);
     }
 

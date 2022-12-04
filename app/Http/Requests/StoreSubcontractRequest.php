@@ -31,14 +31,14 @@ class StoreSubcontractRequest extends FormRequest
             'starting_date' => 'required|date|after:date',
             'subject' => 'required|string',
             'agreement_number' => 'required|string',
-            'other_materials' => 'required|array|min:1',
+            'other_materials' => 'array',
             'other_materials.*.material_name' => 'required|string',
             'other_materials.*.unit' => 'required|string',
             'other_materials.*.quantity' => 'required|numeric',
             'other_materials.*.individual_price' => 'required|numeric',
             'other_materials.*.overall_price' => 'required|numeric',
             'other_materials.*.number' => 'required|string',
-            'contract_materials' =>'required|array|min:1',
+            'contract_materials' =>'array',
             'contract_materials.*.id' => 'required|numeric|exists:contract_materials',
             'contract_materials.*.quantity' => 'required|numeric'
         ];
