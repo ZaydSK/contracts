@@ -69,6 +69,7 @@ class Contract extends Model
             'number' => $material['number'],
             'material_name' => $material['material_name'],
             'unit' => $material['unit'],
+            'price' => $material['price'],
             'quantity' => $amount['quantity'],
             'not_used_quantity' => $amount['not_used_quantity'],
             'sub_contract_number' => '0'
@@ -82,6 +83,7 @@ class Contract extends Model
             'id' => $material->id,
             'number' => $material->number,
             'material_name' => $material->material_name,
+            'price' => $material->price,
             'unit' => $material->unit,
             'quantity' => $details['quantity'],
             'not_used_quantity' => $details['not_used_quantity'],
@@ -90,9 +92,10 @@ class Contract extends Model
     }
     
     
-    return [
-        'contract' => $old_amounts,
-        'other' => $new_amounts
-    ];
+    // return [
+    //     'contract' => $old_amounts,
+    //     'other' => $new_amounts
+    // ];
+    return array_merge($old_amounts,$new_amounts);
   }
 }
