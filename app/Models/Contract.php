@@ -85,8 +85,8 @@ class Contract extends Model
             'material_name' => $material->material_name,
             'price' => $material->price,
             'unit' => $material->unit,
-            'quantity' => $details['quantity'],
-            'not_used_quantity' => $details['not_used_quantity'],
+            'quantity' => (string)$details['quantity'],
+            'not_used_quantity' => (string)$details['not_used_quantity'],
             'sub_contract_number' => $parent->number
         ]);
     }
