@@ -27,7 +27,7 @@ class StoreSubcontractRequest extends FormRequest
     {
         return [
             'agreement_date' =>'required|date',
-            'number' =>'required|string',
+            'number' =>'required|string|unique:subcontracts,number',
             'starting_date' => 'required|date|after:date',
             'subject' => 'required|string',
             'agreement_number' => 'required|string',
