@@ -228,18 +228,20 @@ class ContractController extends Controller
         foreach($materials as $material){
             $bill_material = $bill->materials()->create($material);
 
-            $ids = Subcontract::where('contract_id',$contract->id)->pluck('id');
+            $ids = Subcontract::where('contract_id',$contract->id)->pluck('id')->toArray();
+            $ids2 = Increase::where('contract_id',$contract->id)->pluck('id')->toArray();
+            $allIds = array_merge($ids,$ids2);
             $materialAmounts = MaterialAmount::where('material_id',$material['material_id'])
-            ->where(function($query) use($contract,$ids){
+            ->where(function($query) use($contract,$allIds){
                 $query->where([
                     ['parentable_type',"App\\Models\\Contract"],
                     ['parentable_id',$contract->id]
-            ])->orWhere(function($query) use ($ids){
-                $query->whereIn('parentable_id',$ids)
+            ])->orWhere(function($query) use ($allIds){
+                $query->whereIn('parentable_id',$allIds)
                     ->where('parentable_type',"App\\Models\\Subcontract");
             
-            })->orWhere(function($query) use ($ids){
-                $query->whereIn('parentable_id',$ids)
+            })->orWhere(function($query) use ($allIds){
+                $query->whereIn('parentable_id',$allIds)
                     ->where('parentable_type',"App\\Models\\Increase");
             
             });})->get();
