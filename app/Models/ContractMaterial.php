@@ -20,4 +20,8 @@ class ContractMaterial extends Model
     public function contract(){
         return $this->belongsTo(Contract::class);
     }
+
+    public function increase(){
+        return $this->hasOne(Increase::class);
+    }
 }

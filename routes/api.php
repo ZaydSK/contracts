@@ -30,6 +30,8 @@ Route::prefix('contracts')->group( function(){
     Route::post('/', [ContractController::class,'add']);
     Route::post('/search', [ContractController::class,'search']);
     Route::get('/{contract}/materials', [ContractController::class,'materials']);
+    Route::get('/{contract}/increases', [ContractController::class,'increases']);
+    Route::post('/{contract}/increases', [ContractController::class,'addIncrease']);
 
 
 });

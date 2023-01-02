@@ -43,13 +43,14 @@ class Contract extends Model
         return $this->morphMany(MaterialAmount::class,'parentable');
     }
 
+    public function increases(){
+        return $this->hasMany(Increase::class);
+    }
+
   public function summed(){
-    $subs = Subcontract::where('contract_id',$this->id)->pluck('id')->toArray();
     $oldMaterial = ContractMaterial::where([['contract_material',1],['contract_id',$this->id]])->get();
     $old = $oldMaterial->pluck('id');
     $newMaterial = ContractMaterial::where([['contract_material',0],['contract_id',$this->id]])->get();
-    $new = $newMaterial->pluck('id');
-    //return $newMaterial;
     $old_amounts = [];
     
     $old_amounts = MaterialAmount::whereIn('material_id',$old)->groupBy('material_id')
@@ -64,6 +65,7 @@ class Contract extends Model
 
     $old_amounts = array_map(function($amount){
         $material = ContractMaterial::where('id',$amount['material_id'])->first();
+        $increase = Increase::where('material_id',$amount['material_id'])->first();
         return [
             'id' => $material['id'],
             'number' => $material['number'],
@@ -90,12 +92,6 @@ class Contract extends Model
             'sub_contract_number' => $parent->number
         ]);
     }
-    
-    
-    // return [
-    //     'contract' => $old_amounts,
-    //     'other' => $new_amounts
-    // ];
     return array_merge($old_amounts,$new_amounts);
   }
 }

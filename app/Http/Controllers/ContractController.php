@@ -6,20 +6,22 @@ use App\Http\Requests\StoreBillRequest;
 use App\Models\Contract;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreContractRequest;
+use App\Http\Requests\StoreIncreaseRequest;
 use App\Http\Requests\StoreSubcontractRequest;
 use App\Http\Resources\BillResource;
 use App\Http\Resources\ContractMaterialResource;
 use App\Http\Resources\ContractResource;
 use App\Models\Bill;
-use App\Models\BillMaterial;
-use App\Models\BillMaterialDetails;
 use App\Models\ContractMaterial;
+use App\Models\Increase;
 use App\Models\MaterialAmount;
 use App\Models\Subcontract;
 use Carbon\Carbon;
 
 class ContractController extends Controller
 {
+    //TODO: Search in JSON array to make sure no material is added twice
+    //TODO: Edit the add bill function to use the Increase qty
     //TODO? ADD sub contract / each contract shouldn't have more than 10 subs
     //TODO? new price of all subs shouldn't exceed 25% of original new price
     public function all(){
@@ -281,5 +283,63 @@ class ContractController extends Controller
 
     public function allBills(Contract $contract){
         return BillResource::collection(Bill::where('contract_id',$contract->id)->get());
+    }
+
+    public function addIncrease(Contract $contract,StoreIncreaseRequest $request){
+
+        $materials_price = 0;
+        $materials = [];
+        foreach($request->materials as $material){
+            $increase = Increase::where('materials->id',$material['id'])->first();
+            //dd(Increase::where('materials->>id',$material['id'])->toSql());
+            if($increase){
+                return response(['error' =>'لا يمكنك إضافة نسبة لمادة تمت اضافة نسبة لها مسبقاً'],400);
+            }
+    
+            $cMaterial = ContractMaterial::where('id',$material['id'])->first();
+            $original_quantity = MaterialAmount::where('material_id',$material['id'])->first()['quantity'];
+            $increase_quantity = floor($original_quantity * $material['percent']/100);
+            $increase_price = $increase_quantity * $cMaterial['price'];
+            $materials_price += $increase_price;
+
+            array_push($materials, [
+                'id' => $material['id'],
+                'percent' => $material['percent'],
+                'price' => $increase_price,
+                'quantity' => $increase_quantity,
+            ]);
+            
+        };
+         
+        $all_increases = Increase::where('contract_id',$contract->id)->sum('price');
+        if($all_increases + $materials_price > $contract->price*0.25){
+            return response('مجموع المواد يتجاوز قيمة ربع العقد',400);
+        }
+
+        $increase = Increase::create([
+            'contract_id' => $contract['id'],
+            'number' => $request->number,
+            'materials' => $materials,
+            'price' => $materials_price
+        ]);
+
+        $increase->materialAmounts()->createMany(array_map(function($material){
+            $cMaterial = ContractMaterial::where('id',$material['id'])->first();
+            return [
+                'material_id' => $material['id'],
+                'individual_price' => $cMaterial['price'],
+                'overall_price' => $material['price'],
+                'quantity' => $material['quantity'],
+                'not_used_quantity' => $material['quantity'],
+            ];
+        },$materials));
+
+        return response(['data'=>$increase]);
+
+        
+    }
+
+    public function increases(Contract $contract ){
+        return response(Increase::where('contract_id',$contract['id'])->get());
     }
 }
