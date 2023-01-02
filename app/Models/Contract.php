@@ -65,7 +65,19 @@ class Contract extends Model
 
     $old_amounts = array_map(function($amount){
         $material = ContractMaterial::where('id',$amount['material_id'])->first();
-        $increase = Increase::where('materials->id',$material['id'])->first();
+        $increase = Increase::where('contract_id',$this->id)->pluck('materials')->toArray();
+        $filtered =[];
+        foreach($increase as $item){
+            foreach($item as $itm){
+                array_push($filtered,$itm);
+            }
+        }
+        $increasePercent = 0;
+        foreach($filtered as $itm){
+            if($itm['id'] == $material['id']){
+                $increasePercent = $itm['percent'];
+            }
+        }
         return [
             'id' => $material['id'],
             'number' => $material['number'],
@@ -74,7 +86,8 @@ class Contract extends Model
             'price' => $material['price'],
             'quantity' => $amount['quantity'],
             'not_used_quantity' => $amount['not_used_quantity'],
-            'sub_contract_number' => '0'
+            'sub_contract_number' => '0',
+            'percent' => $increasePercent
         ];
     },$old_amounts);
     $new_amounts = [];

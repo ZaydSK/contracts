@@ -238,6 +238,10 @@ class ContractController extends Controller
                 $query->whereIn('parentable_id',$ids)
                     ->where('parentable_type',"App\\Models\\Subcontract");
             
+            })->orWhere(function($query) use ($ids){
+                $query->whereIn('parentable_id',$ids)
+                    ->where('parentable_type',"App\\Models\\Increase");
+            
             });})->get();
            
             foreach($materialAmounts as $amount){
@@ -287,14 +291,24 @@ class ContractController extends Controller
 
     public function addIncrease(Contract $contract,StoreIncreaseRequest $request){
 
+        $increase = Increase::where('contract_id',$contract->id)->pluck('materials')->toArray();
+        $filtered =[];
+        foreach($increase as $item){
+            foreach($item as $itm){
+                array_push($filtered,$itm['id']);
+            }
+        }
         $materials_price = 0;
         $materials = [];
         foreach($request->materials as $material){
-            $increase = Increase::where('materials->id',$material['id'])->first();
-            //dd(Increase::where('materials->>id',$material['id'])->toSql());
-            if($increase){
-                return response(['error' =>'لا يمكنك إضافة نسبة لمادة تمت اضافة نسبة لها مسبقاً'],400);
+            
+            foreach($filtered as $itm){
+                if($itm == $material['id']){
+                    return response(['error' =>'لا يمكنك إضافة نسبة لمادة تمت اضافة نسبة لها مسبقاً'],400);
+                }
             }
+        
+            //return $filtered;
     
             $cMaterial = ContractMaterial::where('id',$material['id'])->first();
             $original_quantity = MaterialAmount::where('material_id',$material['id'])->first()['quantity'];
