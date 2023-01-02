@@ -65,7 +65,7 @@ class Contract extends Model
 
     $old_amounts = array_map(function($amount){
         $material = ContractMaterial::where('id',$amount['material_id'])->first();
-        $increase = Increase::where('material_id',$amount['material_id'])->first();
+        $increase = Increase::where('materials->id',$material['id'])->first();
         return [
             'id' => $material['id'],
             'number' => $material['number'],
