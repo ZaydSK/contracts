@@ -102,7 +102,8 @@ class Contract extends Model
             'unit' => $material->unit,
             'quantity' => (string)$details['quantity'],
             'not_used_quantity' => (string)$details['not_used_quantity'],
-            'sub_contract_number' => $parent->number
+            'sub_contract_number' => $parent->number,
+            'percent' => 0
         ]);
     }
     return array_merge($old_amounts,$new_amounts);
