@@ -263,8 +263,8 @@ class ContractController extends Controller
                     } else {
                         $bill_material->details()->create([
                             'material_amount_id' => $amount['id'],
-                            'price' => $amount['individual_price'] * $material['quantity'],
-                            'quantity' =>  $material['quantity']
+                            'price' => $amount['individual_price'] * $amount->not_used_quantity,
+                            'quantity' =>  $amount->not_used_quantity
                         ]);
                         $material['quantity'] -= $amount->not_used_quantity;
                         $amount->not_used_quantity = 0;
@@ -281,6 +281,7 @@ class ContractController extends Controller
     }
 
     public function oneBill(Contract $contract,Bill $bill){
+        //return $bill->subs();
         if($bill->contract_id!=$contract->id){
             return response("لا يوجد كشف يحمل المعرف المطلوب ضمن مشوفات العقد الحالي",400);
         }

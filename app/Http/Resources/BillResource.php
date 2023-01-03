@@ -25,7 +25,7 @@ class BillResource extends JsonResource
             'executing_agency_price' => $this->executing_agency_price,
             'discount_of_executing_agency_price' => $this->discount_of_executing_agency_price,
             'executing_agency_price_after_discount' => $this->executing_agency_price - $this->discount_of_executing_agency_price,
-            'subs' => $this->subs,
+            'subs' => $this->subs(),
             'materials' => BillMaterialResource::collection($this->materials)
         ];
     }
