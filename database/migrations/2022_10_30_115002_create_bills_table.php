@@ -16,6 +16,7 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('contract_id');
+            $table->integer('number');
             $table->foreign('contract_id')->references('id')->on('contracts');
             $table->date('date');
             $table->bigInteger('price');

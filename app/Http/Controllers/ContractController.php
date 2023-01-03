@@ -210,9 +210,10 @@ class ContractController extends Controller
             $up_price=$bill_price;
         }
     
-        $executing_agency_price =  $up_price - $request->discount + $contract->subs->sum('up_price');
-        
+        $executing_agency_price =  $up_price + $contract->subs->sum('up_price');
+        $number = Bill::where('contract_id',$contract->id)->count();
         $bill = Bill::create([
+            'number' => $number+1,
             'contract_id' => $contract->id,
             'date' => $request->date,
             'discount' => $request->discount,
