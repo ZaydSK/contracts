@@ -15,18 +15,26 @@ class BillResource extends JsonResource
      */
     public function toArray($request)
     {
+        $price = (array_sum(array_column($this->subs(),'price')) +
+        $this->getContractMaterialsPrice() );
+        
+        $price_after_stoppings= $price - $price*$this->contract->stoppings_percent/100;
+        $price_after_discount = $price_after_stoppings - $this->discount;
         return [
             'id'=> $this->id,
             'contract_id' => $this->contract_id,
             'date' => substr($this->date,0,7),
             'price' => $this->price,
             'up_price' => $this->up_price,
-            'discount' => $this->discount,
-            'executing_agency_price' => $this->executing_agency_price,
-            'discount_of_executing_agency_price' => $this->discount_of_executing_agency_price,
-            'executing_agency_price_after_discount' => $this->executing_agency_price - $this->discount_of_executing_agency_price,
+            'contract_materials_price' => $this->getContractMaterialsPrice(),
             'subs' => $this->subs(),
-            'materials' => BillMaterialResource::collection($this->materials)
+            'stoppings' => $this->contract->stoppings_percent,
+            'stoppings_value' =>  $price*$this->contract->stoppings_percent/100,
+            'price_after_stoppings' => $price_after_stoppings,
+            'discount' => $this->discount,
+            'price_after_stoppings_and_discount' => $price_after_discount ,
+            'materials' => BillMaterialResource::collection($this->materials),
+            
         ];
     }
 }

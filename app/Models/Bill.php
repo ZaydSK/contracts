@@ -20,6 +20,30 @@ class Bill extends Model
         'executing_agency_price'
     ];
 
+    
+
+    public function getContractMaterialsPrice(){
+        $subs = BillMaterial::where('bill_id',$this->id)->pluck('id');
+        $subs_details = BillMaterialDetails::whereIn('bill_material_id',$subs)->get()->toArray();
+        $price = 0;
+        foreach($subs_details as $sub) {
+            $material = MaterialAmount::where('id',$sub['material_amount_id'])->where(function($query){
+                $query->where('parentable_type','App\Models\Contract')
+                ->orWhere('parentable_type','App\Models\Increase');
+            })->first();
+            if(!$material){continue;}
+            $up_price = $sub['price'];
+            if($this->contract->up_percent != 0){
+                $up_price += $sub['price'] * $this->contract->up_percent/100;
+            } else {
+                $up_price += $sub['price'] * $this->contract->down_percent/100;
+            }
+            $price += $up_price ; 
+        };
+       
+        return $price;
+    }
+
     public function materials()
     {
         return $this->hasMany(BillMaterial::class);
@@ -39,7 +63,7 @@ class Bill extends Model
             $parent = $material->parentable;
             array_push($infos, [
                 'sub_contract_number' => $parent['number'],
-                'used_quantity' => $sub['quantity']
+                'price' => $sub['price']
             ]);
         
         };

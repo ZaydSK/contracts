@@ -210,7 +210,7 @@ class ContractController extends Controller
             $up_price=$bill_price;
         }
     
-        $executing_agency_price =  $up_price + $contract->subs->sum('up_price');
+        $executing_agency_price = 0;
         $number = Bill::where('contract_id',$contract->id)->count();
         $bill = Bill::create([
             'number' => $number+1,
@@ -237,11 +237,11 @@ class ContractController extends Controller
                 $query->where([
                     ['parentable_type',"App\\Models\\Contract"],
                     ['parentable_id',$contract->id]
-            ])->orWhere(function($query) use ($allIds){
-                $query->whereIn('parentable_id',$allIds)
+                ])->orWhere(function($query) use ($allIds){
+                    $query->whereIn('parentable_id',$allIds)
                     ->where('parentable_type',"App\\Models\\Subcontract");
             
-            })->orWhere(function($query) use ($allIds){
+                })->orWhere(function($query) use ($allIds){
                 $query->whereIn('parentable_id',$allIds)
                     ->where('parentable_type',"App\\Models\\Increase");
             
@@ -317,7 +317,13 @@ class ContractController extends Controller
             $cMaterial = ContractMaterial::where('id',$material['id'])->first();
             $original_quantity = MaterialAmount::where('material_id',$material['id'])->first()['quantity'];
             $increase_quantity = floor($original_quantity * $material['percent']/100);
-            $increase_price = $increase_quantity * $cMaterial['price'];
+            $increase_price = $cMaterial['price'];
+            if($contract->up_percent!=0){
+                $increase_price +=$cMaterial['price'] * $contract->up_percent/100;
+            } else {
+                $increase_price += $cMaterial['price'] * $contract->down_percent/100;
+            }
+            $increase_price *= $increase_quantity;
             $materials_price += $increase_price;
 
             array_push($materials, [
@@ -330,7 +336,7 @@ class ContractController extends Controller
         };
          
         $all_increases = Increase::where('contract_id',$contract->id)->sum('price');
-        if($all_increases + $materials_price > $contract->price*0.25){
+        if($all_increases + $materials_price > $contract->up_price*0.25){
             return response('مجموع المواد يتجاوز قيمة ربع العقد',400);
         }
 

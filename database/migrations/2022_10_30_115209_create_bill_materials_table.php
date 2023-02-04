@@ -21,6 +21,7 @@ class CreateBillMaterialsTable extends Migration
             $table->bigInteger('price');
             $table->timestamps();
             $table->foreign('bill_id')->references('id')->on('bills');
+            $table->foreign('material_id')->references('id')->on('contract_materials');
         });
     }
 
