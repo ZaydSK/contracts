@@ -22,6 +22,7 @@ class BillResource extends JsonResource
         $price_after_discount = $price_after_stoppings - $this->discount;
         return [
             'id'=> $this->id,
+            'number' =>$this->number,
             'contract_id' => $this->contract_id,
             'date' => substr($this->date,0,7),
             'price' => $this->price,
