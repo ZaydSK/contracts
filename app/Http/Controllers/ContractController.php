@@ -34,6 +34,7 @@ class ContractController extends Controller
     }
 
     public function materials(Contract $contract){
+        //return $contract->materials;
         return ContractMaterialResource::collection($contract->materials);
     }
 
@@ -343,6 +344,8 @@ class ContractController extends Controller
         $increase = Increase::create([
             'contract_id' => $contract['id'],
             'number' => $request->number,
+            'period' => $request->period,
+            'date' => $request->date,
             'materials' => $materials,
             'price' => $materials_price
         ]);

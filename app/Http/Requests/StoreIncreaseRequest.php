@@ -28,6 +28,8 @@ class StoreIncreaseRequest extends FormRequest
     {   
         return [
             'number' => ['required','string'],
+            'period' => ['required','string'],
+            'date' => ['required','date'],
             'materials' => ['required','array','min:1'],
             'materials.*.id' => [ 'required','numeric', 
                 Rule::exists('contract_materials','id')->where('contract_id',$this->contract->id)],

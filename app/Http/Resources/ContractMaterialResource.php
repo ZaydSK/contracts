@@ -3,7 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\ContractMaterial;
+use App\Models\MaterialAmount;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class ContractMaterialResource extends JsonResource
 {
@@ -15,20 +17,25 @@ class ContractMaterialResource extends JsonResource
      */
     public function toArray($request)
     {
-        $material =  ContractMaterial::where('id',$this->material_id)->first();
+        $material =  MaterialAmount::where('material_id',$this->id)->first();
+        $nuq =  MaterialAmount::where([['material_id',$this->id],['parentable_type','App\Models\Increase']])->sum('not_used_quantity');
+        $q =  MaterialAmount::where([['material_id',$this->id],['parentable_type','App\Models\Increase']])->sum('quantity');
         
         return [
-            'id' => $material->id,
-            'number' => $material->number,
-            'material_name' => $this->when($material->parentable_type == "App\\Models\\Subcontract
-            " && !$material->contract_material,$material->material_name . "(" .$this->parentable->number .")",
-                 $material->material_name),
-            'contract_id' => $material->contract_id,
-            'individual_price' => $this->individual_price,
-            'overall_price' => $this->overall_price,
-            'quantity' => $this->quantity,
-            'not_used_quantity' => $this->not_used_quantity,
-            'unit' => $material->unit,
+            'id' => $this->id,
+            'number' => $this->number,
+            'material_name' => 
+            $this->when($this->parentable_type == "App\\Models\\Subcontract
+            " && !$this->contract_material,$material->material_name . "(" .$material->parentable->number .")",
+                 $this->material_name),
+            'contract_id' => $this->contract_id,
+            'individual_price' => $material->individual_price,
+            'overall_price' => $material->overall_price,
+            'quantity' => $material->quantity,
+            'all_quantity' => $material->quantity + $q,
+            'not_used_quantity' => $material->not_used_quantity,
+            'increase' => $q - $nuq,
+            'unit' => $this->unit,
         ];
     }
 }

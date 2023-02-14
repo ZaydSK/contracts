@@ -16,11 +16,10 @@ class CreateSubcontractsTable extends Migration
         Schema::create('subcontracts', function (Blueprint $table) {
             $table->id();
             $table->text('number');
-            $table->text('agreement_number');
+            $table->text('period');
             $table->text('subject');
             $table->double('price');
             $table->date('starting_date');
-            $table->date('agreement_date');
             $table->unsignedBigInteger('contract_id');
             $table->foreign('contract_id')->references('id')->on('contracts');
             $table->timestamps();

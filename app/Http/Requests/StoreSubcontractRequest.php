@@ -26,11 +26,10 @@ class StoreSubcontractRequest extends FormRequest
     public function rules()
     {
         return [
-            'agreement_date' =>'required|date',
-            'number' =>'required|string|unique:subcontracts,number',
+            'number' =>'required|string',
             'starting_date' => 'required|date|after:date',
             'subject' => 'required|string',
-            'agreement_number' => 'required|string',
+            'period' => 'required|string',
             'other_materials' => 'array',
             'other_materials.*.material_name' => 'required|string',
             'other_materials.*.unit' => 'required|string',

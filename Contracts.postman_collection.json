@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"area_name\":\"ggg\",\r\n    \"executing_agency\":\"dddd\",\r\n    \"watching_agency\":\"dddd\",\r\n    \"date\":\"2020-10-20\",\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"finishing_date\":\"2020-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"stoppings_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"gg\",\r\n    \"branch\":\"ssssss\",\r\n    \"project_name\":\"sssssss\",\r\n    \"materials\":[\r\n        {\r\n            \"material_name\":\"Steel\",\r\n            \"unit\":\"f\",\r\n            \"number\":\"s5sf\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"area_name\":\"ggg\",\r\n    \"executing_agency\":\"dddd\",\r\n    \"watching_agency\":\"dddd\",\r\n    \"date\":\"2020-10-20\",\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"finishing_date\":\"2020-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"stoppings_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"gg\",\r\n    \"branch\":\"ssssss\",\r\n    \"project_name\":\"sssssss\",\r\n    \"materials\":[\r\n        {\r\n            \"material_name\":\"Steel\",\r\n            \"unit\":\"f\",\r\n            \"number\":\"s5sf\",\r\n            \"quantity\":100,\r\n            \"individual_price\":60,\r\n            \"overall_price\":6000\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,13 +36,47 @@
 			"response": []
 		},
 		{
+			"name": "add increase",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"number\" : \"fafdafdsfsd\",\r\n  \"period\":\"25\",\r\n  \"date\":\"2020-10-10\",\r\n \"materials\" : [\r\n    {\r\n        \"id\" : 1,\r\n        \"percent\" : 25\r\n        \r\n    }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/contracts/1/increases",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"increases"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add sub contract",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"agreement_date\":\"2020-10-22\",\r\n    \"agreement_number\":\"2020-10-22\",\r\n    \"number\": \"gg\",\r\n    \"subject\":\"sssssss\",\r\n    \"contract_materials\":[\r\n        {\r\n            \"id\":1,\r\n            \"quantity\":20\r\n        },\r\n         {\r\n            \"id\":1,\r\n            \"quantity\":20\r\n        }\r\n    ],\r\n    \"other_materials\":[\r\n        {\r\n        \"material_name\" : \"gg\",\r\n        \"quantity\":20,\r\n        \"number\":\"gg\",\r\n        \"individual_price\":55,\r\n        \"unit\":\"ff\",\r\n        \"overall_price\":5\r\n        },\r\n        {\r\n        \"material_name\" : \"gg\",\r\n        \"quantity\":20,\r\n        \"number\":\"gg\",\r\n        \"individual_price\":55,\r\n        \"unit\":\"ff\",\r\n        \"overall_price\":5\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"period\":\"10\",\r\n    \"number\": \"gg\",\r\n    \"subject\":\"sssssss\",\r\n    \"other_materials\":[\r\n        {\r\n        \"material_name\" : \"gg\",\r\n        \"quantity\":20,\r\n        \"number\":\"gg\",\r\n        \"individual_price\":55,\r\n        \"unit\":\"ff\",\r\n        \"overall_price\":5\r\n        },\r\n        {\r\n        \"material_name\" : \"gg\",\r\n        \"quantity\":20,\r\n        \"number\":\"gg\",\r\n        \"individual_price\":55,\r\n        \"unit\":\"ff\",\r\n        \"overall_price\":5\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -114,7 +148,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/contracts/1/bills/6",
+					"raw": "localhost:8000/api/contracts/1/bills/1",
 					"host": [
 						"localhost"
 					],
@@ -124,7 +158,7 @@
 						"contracts",
 						"1",
 						"bills",
-						"6"
+						"1"
 					]
 				}
 			},
@@ -171,7 +205,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \r\n    \"executing_agency\":\"dddd\",\r\n    \"number\": \"gg\",\r\n    \"branch\":\"ssdssss\"\r\n}",
+					"raw": "{\r\n    \"executing_agency\":\"\",\r\n    \"number\": \"\",\r\n    \"branch\":\"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -195,42 +229,9 @@
 		},
 		{
 			"name": "materials for a contract",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "date",
-							"value": "2022-10-20",
-							"type": "text"
-						},
-						{
-							"key": "quantity",
-							"value": "20",
-							"type": "text"
-						},
-						{
-							"key": "individual_price",
-							"value": "20",
-							"type": "text"
-						},
-						{
-							"key": "material_name",
-							"value": "Steel",
-							"type": "text"
-						},
-						{
-							"key": "number",
-							"value": "20",
-							"type": "text"
-						}
-					]
-				},
 				"url": {
 					"raw": "localhost:8000/api/contracts/1/materials",
 					"host": [

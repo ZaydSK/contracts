@@ -17,6 +17,8 @@ class CreateIncreasesTable extends Migration
             $table->id();
             $table->string('number');
             $table->double('price');
+            $table->string('period');
+            $table->date('date');
             $table->unsignedBigInteger('contract_id');
             $table->json('materials');
             $table->foreign('contract_id')->references('id')->on('contracts');

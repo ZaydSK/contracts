@@ -11,8 +11,7 @@ class Subcontract extends Model
 
     protected $fillable = [
         'contract_id',
-        'agreement_date',
-        'agreement_number', 
+        'period', 
         'number', 
         'price', 
         'subject',
