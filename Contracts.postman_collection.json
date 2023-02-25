@@ -41,16 +41,42 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"number\" : \"fafdafdsfsd\",\r\n  \"period\":\"25\",\r\n  \"date\":\"2020-10-10\",\r\n \"materials\" : [\r\n    {\r\n        \"id\" : 1,\r\n        \"percent\" : 25\r\n        \r\n    }\r\n   ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "number",
+							"value": "fafdafdsfsd",
+							"type": "text"
+						},
+						{
+							"key": "period",
+							"value": "25",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2020-10-10",
+							"type": "text"
+						},
+						{
+							"key": "materials[0][id]",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "materials[0][percent]",
+							"value": "29",
+							"type": "text"
+						},
+						{
+							"key": "doc",
+							"type": "file",
+							"src": "/C:/Users/zaska/Pictures/Nitro/Gaming_5000x3125.jpg"
 						}
-					}
+					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/contracts/1/increases",
+					"raw": "http://127.0.0.1:8000/api/contracts/2/increases",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -62,7 +88,7 @@
 					"path": [
 						"api",
 						"contracts",
-						"1",
+						"2",
 						"increases"
 					]
 				}
@@ -75,16 +101,97 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"period\":\"10\",\r\n    \"number\": \"gg\",\r\n    \"subject\":\"sssssss\",\r\n    \"other_materials\":[\r\n        {\r\n        \"material_name\" : \"gg\",\r\n        \"quantity\":20,\r\n        \"number\":\"gg\",\r\n        \"individual_price\":55,\r\n        \"unit\":\"ff\",\r\n        \"overall_price\":5\r\n        },\r\n        {\r\n        \"material_name\" : \"gg\",\r\n        \"quantity\":20,\r\n        \"number\":\"gg\",\r\n        \"individual_price\":55,\r\n        \"unit\":\"ff\",\r\n        \"overall_price\":5\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "starting_date",
+							"value": "2020-10-21",
+							"type": "text"
+						},
+						{
+							"key": "period",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "number",
+							"value": "aaa",
+							"type": "text"
+						},
+						{
+							"key": "subject",
+							"value": "sssssss",
+							"type": "text"
+						},
+						{
+							"key": "doc",
+							"type": "file",
+							"src": "/C:/Users/zaska/Pictures/Nitro/Gaming_5000x3125.jpg"
+						},
+						{
+							"key": "other_materials[0][material_name]",
+							"value": "gg",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[0][quantity]",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[0][number]",
+							"value": "gg",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[0][individual_price]",
+							"value": "55",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[0][unit]",
+							"value": "ff",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[0][overall_price]",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[1][material_name]",
+							"value": "gg",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[1][quantity]",
+							"value": "20",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[1][number]",
+							"value": "gg",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[1][individual_price]",
+							"value": "55",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[1][unit]",
+							"value": "ff",
+							"type": "text"
+						},
+						{
+							"key": "other_materials[1][overall_price]",
+							"value": "5",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
-					"raw": "localhost:8000/api/contracts/1/subs",
+					"raw": "localhost:8000/api/contracts/2/subs",
 					"host": [
 						"localhost"
 					],
@@ -92,7 +199,7 @@
 					"path": [
 						"api",
 						"contracts",
-						"1",
+						"2",
 						"subs"
 					]
 				}
