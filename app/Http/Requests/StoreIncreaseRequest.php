@@ -30,7 +30,7 @@ class StoreIncreaseRequest extends FormRequest
             'number' => ['required','string'],
             'period' => ['required','string'],
             'date' => ['required','date'],
-            'doc' => 'file|mimes:png,jpg',
+            'doc' => 'file|mimes:png,jpg,pdf',
             'materials' => ['required','array','min:1'],
             'materials.*.id' => [ 'required','numeric', 
                 Rule::exists('contract_materials','id')->where('contract_id',$this->contract->id)],

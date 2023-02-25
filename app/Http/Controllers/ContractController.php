@@ -187,9 +187,15 @@ class ContractController extends Controller
             $up_price = $bill_price;
         }
 
+        $contractSubsPrice = $contract->subs()->sum('price');
+        $contractIncreasesPrice = $contract->increases()->sum('price');
+        $contractBillsPrice = $contract->bills()->sum('price');
+        $completion_percent = 1.0*$bill_price / ($contractSubsPrice + $contractIncreasesPrice + $contract->price); 
+        $accumulated_completion_percent = 1.0*($bill_price + $contractBillsPrice) / ($contractSubsPrice + $contractIncreasesPrice + $contract->price); 
+
         $executing_agency_price = 0;
         $number = Bill::where('contract_id', $contract->id)->count();
-        $bill = Bill::create([
+        $payload = [
             'number' => $number + 1,
             'contract_id' => $contract->id,
             'date' => $request->date,
@@ -197,8 +203,12 @@ class ContractController extends Controller
             'price' => $bill_price,
             'up_price' => $up_price,
             'executing_agency_price' => $executing_agency_price,
-            'discount_of_executing_agency_price' => $executing_agency_price * $contract->stoppings_percent / 100
-        ]);
+            'discount_of_executing_agency_price' => $executing_agency_price * $contract->stoppings_percent / 100,
+            'completion_percent' => $completion_percent,
+            'accumulated_completion_percent' => $accumulated_completion_percent
+        ];
+       // return $payload;
+        $bill = Bill::create($payload);
 
         foreach ($materials as $material) {
             $bill_material = $bill->materials()->create($material);

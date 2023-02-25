@@ -17,7 +17,9 @@ class Bill extends Model
         'up_price',
         'discount', 
         'discount_of_executing_agency_price', 
-        'executing_agency_price'
+        'executing_agency_price',
+        'completion_percent',
+        'accumulated_completion_percent',
     ];
 
     

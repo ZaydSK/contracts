@@ -27,6 +27,8 @@ class BillResource extends JsonResource
             'date' => substr($this->date,0,7),
             'price' => $this->price,
             'up_price' => $this->up_price,
+            'completion_percent' => $this->completion_percent,
+            'accumulated_completion_percent' => $this->accumulated_completion_percent,
             'contract_materials_price' => $this->getContractMaterialsPrice(),
             'subs' => $this->subs(),
             'stoppings' => $this->contract->stoppings_percent,
