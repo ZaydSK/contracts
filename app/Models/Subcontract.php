@@ -16,6 +16,7 @@ class Subcontract extends Model
         'price', 
         'subject',
         'starting_date',
+        'doc_url'
     ];
 
     public function materialAmounts(){

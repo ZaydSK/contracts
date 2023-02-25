@@ -27,6 +27,7 @@ class StoreSubcontractRequest extends FormRequest
     {
         return [
             'number' =>'required|string',
+            'doc' => 'file|mimes:png,jpg',
             'starting_date' => 'required|date|after:date',
             'subject' => 'required|string',
             'period' => 'required|string',
