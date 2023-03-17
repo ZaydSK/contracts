@@ -31,6 +31,7 @@ class StoreBillRequest extends FormRequest
             'materials' => 'required|array|min:1',
             'materials.*.material_id' => 'required|numeric',
             'materials.*.quantity' => 'required|numeric',
+            'materials.*.stoppings' => 'required|numeric|min:0|max:100',
         ];
     }
 

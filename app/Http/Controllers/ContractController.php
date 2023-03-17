@@ -166,14 +166,18 @@ class ContractController extends Controller
         $bill_price = 0;
         $materials = [];
         foreach ($request->materials as $material) {
+            $quantity = $material['quantity'];
+            if($material['stoppings'] != 0){
+                $quantity -= $quantity * $material['stoppings']/100.0; 
+            }
             $not_used_quantity = MaterialAmount::where('material_id', $material['material_id'])->sum('not_used_quantity');
-            if ($not_used_quantity < $material['quantity']) {
+            if ($not_used_quantity < $quantity) {
                 return response(["error" => "لا يوجد كمية كافية من المادة " . $material['material_id'] . "،المتبقي هو " . $not_used_quantity]);
             }
 
             $material_price = ContractMaterial::where('id', $material['material_id'])->where('contract_id', $contract->id)->first()->price;
-            $bill_price += $material['quantity'] * $material_price;
-            $material['price'] = $bill_price;
+            $bill_price += $quantity * $material_price;
+            $material['price'] = $quantity * $material_price;
             array_push($materials, $material);
         }
 
@@ -211,7 +215,11 @@ class ContractController extends Controller
         $bill = Bill::create($payload);
 
         foreach ($materials as $material) {
-            $bill_material = $bill->materials()->create($material);
+            $quantity = $material['quantity'];
+                if($material['stoppings'] != 0){
+                    $quantity -= $quantity * $material['stoppings']/100; 
+                }
+            $bill_material = $bill->materials()->create($material + ['stoppings'=>$material['stoppings']]);
 
             $ids = Subcontract::where('contract_id', $contract->id)->pluck('id')->toArray();
             $ids2 = Increase::where('contract_id', $contract->id)->pluck('id')->toArray();
@@ -231,16 +239,16 @@ class ContractController extends Controller
                 })->get();
 
             foreach ($materialAmounts as $amount) {
-
+                
                 if (($material['material_id'] == $amount->material_id) && ($amount->not_used_quantity > 0)) {
 
-                    if ($material['quantity'] <= $amount->not_used_quantity) {
+                    if ($quantity <= $amount->not_used_quantity) {
                         $bill_material->details()->create([
                             'material_amount_id' => $amount['id'],
-                            'price' => $amount['individual_price'] * $material['quantity'],
-                            'quantity' => $material['quantity']
+                            'price' => $amount['individual_price'] * $quantity,
+                            'quantity' => $quantity
                         ]);
-                        $amount->not_used_quantity -= $material['quantity'];
+                        $amount->not_used_quantity -= $quantity;
 
                         $amount->save();
                         break;
@@ -250,7 +258,7 @@ class ContractController extends Controller
                             'price' => $amount['individual_price'] * $amount->not_used_quantity,
                             'quantity' =>  $amount->not_used_quantity
                         ]);
-                        $material['quantity'] -= $amount->not_used_quantity;
+                        $quantity -= $amount->not_used_quantity;
                         $amount->not_used_quantity = 0;
                         $amount->save();
                     }

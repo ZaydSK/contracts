@@ -9,7 +9,7 @@ class BillMaterial extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['material_id','bill_id','quantity','price'];
+    protected $fillable = ['material_id','bill_id','quantity','price','stoppings'];
 
     public function bill(){
         return $this->belongsTo(Bill::class);

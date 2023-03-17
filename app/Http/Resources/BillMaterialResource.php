@@ -14,11 +14,17 @@ class BillMaterialResource extends JsonResource
      */
     public function toArray($request)
     {
+        $quantity = $this->quantity;
+        if($this->stoppings != 0){
+            $quantity -= $quantity * $this->stoppings/100; 
+        }
         return [
             'id' => $this->id,
             'material_id' => $this->material_id,
             'bill_id' => $this->bill_id,
             'quantity' => $this->quantity,
+            'stoppings' => $this->stoppings,
+            'quantity_after_stoppings' => $quantity, 
             'price' => $this->price
         ];
     }
