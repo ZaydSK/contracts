@@ -151,6 +151,20 @@ class ContractController extends Controller
         return new ContractResource(Contract::find($contract->id));
     }
 
+    public function addDocToSub(Request $request,Contract $contract, Subcontract $subcontract){
+        $image_url = null ;
+        if ($request->doc != null) {
+            $imageName = time() . '.' . $request->doc->extension();
+            $request->doc->move(storage_path('app/public/subs'), $imageName);
+            $image_url = '/storage/subs/' . $imageName;
+        } else {
+            return response()->json(['error'=>'doc is required'],400);
+        }
+        $subcontract->update(['doc_url'=>$image_url]);
+        return new ContractResource(Contract::find($contract->id)); 
+
+    }
+
     public function search(Request $request)
     {
         $contracts = Contract::query();
@@ -348,6 +362,20 @@ class ContractController extends Controller
         }, $materials));
 
         return response(['data' => $increase]);
+    }
+
+    public function addDocToIncrease(Request $request,Contract $contract,Increase $increase){
+        $image_url = null ;
+        if ($request->doc != null) {
+            $imageName = time() . '.' . $request->doc->extension();
+            $request->doc->move(storage_path('app/public/increases'), $imageName);
+            $image_url = '/storage/increases/' . $imageName;
+        } else {
+            return response()->json(['error'=>'doc is required'],400);
+        }
+        $increase->update(['doc_url'=>$image_url]);
+        return response(['data' => $increase]);
+
     }
 
     public function increases(Contract $contract)

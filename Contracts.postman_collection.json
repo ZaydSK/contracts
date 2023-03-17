@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"area_name\":\"ggg\",\r\n    \"executing_agency\":\"dddd\",\r\n    \"watching_agency\":\"dddd\",\r\n    \"date\":\"2020-10-20\",\r\n    \"starting_date\":\"2020-10-21\",\r\n    \"finishing_date\":\"2020-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"stoppings_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"gg\",\r\n    \"branch\":\"ssssss\",\r\n    \"project_name\":\"sssssss\",\r\n    \"materials\":[\r\n        {\r\n            \"material_name\":\"Steel\",\r\n            \"unit\":\"f\",\r\n            \"number\":\"s5sf\",\r\n            \"quantity\":100,\r\n            \"individual_price\":60,\r\n            \"overall_price\":6000\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"area_name\":\"Damascus\",\r\n    \"executing_agency\":\"Al Homsi\",\r\n    \"watching_agency\":\"Al Masri\",\r\n    \"date\":\"2024-10-20\",\r\n    \"starting_date\":\"2024-10-21\",\r\n    \"finishing_date\":\"2024-10-22\",\r\n    \"execution_period\":\"365\",\r\n    \"up_percent\":10,\r\n    \"stoppings_percent\":10,\r\n    \"down_percent\": -10,\r\n    \"number\": \"450-d\",\r\n    \"branch\":\"Damascus\",\r\n    \"project_name\":\"Zayd\",\r\n    \"materials\":[\r\n        {\r\n            \"material_name\":\"Steel\",\r\n            \"unit\":\"Kg\",\r\n            \"number\":\"ss-400\",\r\n            \"quantity\":100,\r\n            \"individual_price\":60,\r\n            \"overall_price\":6000\r\n        },\r\n        {\r\n            \"material_name\":\"Wood\",\r\n            \"unit\":\"Kg\",\r\n            \"number\":\"ss-400\",\r\n            \"quantity\":100,\r\n            \"individual_price\":60,\r\n            \"overall_price\":6000\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -60,7 +60,7 @@
 						},
 						{
 							"key": "materials[0][id]",
-							"value": "7",
+							"value": "8",
 							"type": "text"
 						},
 						{
@@ -71,7 +71,8 @@
 						{
 							"key": "doc",
 							"type": "file",
-							"src": "/C:/Users/zaska/Pictures/Nitro/Gaming_5000x3125.jpg"
+							"src": "/C:/Users/zaska/Pictures/Nitro/Gaming_5000x3125.jpg",
+							"disabled": true
 						}
 					]
 				},
@@ -90,6 +91,73 @@
 						"contracts",
 						"2",
 						"increases"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add doc  to increase",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "number",
+							"value": "fafdafdsfsd",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "period",
+							"value": "25",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "date",
+							"value": "2020-10-10",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "materials[0][id]",
+							"value": "7",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "materials[0][percent]",
+							"value": "29",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "doc",
+							"type": "file",
+							"src": "/C:/Users/zaska/Pictures/Nitro/Gaming_5000x3125.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/contracts/2/increases/7/doc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"2",
+						"increases",
+						"7",
+						"doc"
 					]
 				}
 			},
@@ -207,21 +275,118 @@
 			"response": []
 		},
 		{
-			"name": "add bill",
+			"name": "add doc to sub contract",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"date\":\"2022-01-01\",\r\n    \"discount\":5,\r\n    \"materials\": [\r\n        {\r\n            \"material_id\":1,\r\n            \"quantity\":10\r\n        }\r\n    ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "starting_date",
+							"value": "2020-10-21",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "period",
+							"value": "10",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "number",
+							"value": "aaa",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "subject",
+							"value": "sssssss",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "doc",
+							"type": "file",
+							"src": "/C:/Users/zaska/Pictures/Nitro/Gaming_5000x3125.jpg"
+						},
+						{
+							"key": "other_materials[0][material_name]",
+							"value": "gg",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[0][quantity]",
+							"value": "20",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[0][number]",
+							"value": "gg",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[0][individual_price]",
+							"value": "55",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[0][unit]",
+							"value": "ff",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[0][overall_price]",
+							"value": "5",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[1][material_name]",
+							"value": "gg",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[1][quantity]",
+							"value": "20",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[1][number]",
+							"value": "gg",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[1][individual_price]",
+							"value": "55",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[1][unit]",
+							"value": "ff",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "other_materials[1][overall_price]",
+							"value": "5",
+							"type": "text",
+							"disabled": true
 						}
-					}
+					]
 				},
 				"url": {
-					"raw": "localhost:8000/api/contracts/1/bills/",
+					"raw": "localhost:8000/api/contracts/2/subs",
 					"host": [
 						"localhost"
 					],
@@ -229,7 +394,37 @@
 					"path": [
 						"api",
 						"contracts",
-						"1",
+						"2",
+						"subs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add bill",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\":\"2022-01-01\",\r\n    \"discount\":5,\r\n    \"materials\": [\r\n        {\r\n            \"material_id\":27,\r\n            \"quantity\":20,\r\n            \"stoppings\":50\r\n        },\r\n         {\r\n            \"material_id\":28,\r\n            \"quantity\":20,\r\n            \"stoppings\":0\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/contracts/6/bills/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"contracts",
+						"6",
 						"bills",
 						""
 					]
@@ -289,7 +484,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/contracts/1/bills/",
+					"raw": "localhost:8000/api/contracts/5/bills/",
 					"host": [
 						"localhost"
 					],
@@ -297,7 +492,7 @@
 					"path": [
 						"api",
 						"contracts",
-						"1",
+						"5",
 						"bills",
 						""
 					]

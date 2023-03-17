@@ -23,6 +23,7 @@ Route::prefix('contracts')->group( function(){
     Route::post('/{contract}/bills', [ContractController::class,'addBill']);
     Route::get('/{contract}/bills', [ContractController::class,'allBills']);
     Route::post('/{contract}/subs', [ContractController::class,'addSub']);
+    Route::post('/{contract}/subs/{subcontract}/doc', [ContractController::class,'addDocToSub']);
     Route::get('/{contract}/subs', [ContractController::class,'subs']);
     Route::get('/{contract}/bills/{bill}', [ContractController::class,'oneBill']);
     Route::get('/', [ContractController::class,'all']);
@@ -32,6 +33,7 @@ Route::prefix('contracts')->group( function(){
     Route::get('/{contract}/materials', [ContractController::class,'materials']);
     Route::get('/{contract}/increases', [ContractController::class,'increases']);
     Route::post('/{contract}/increases', [ContractController::class,'addIncrease']);
+    Route::post('/{contract}/increases/{increase}/doc', [ContractController::class,'addDocToIncrease']);
 
 
 });
